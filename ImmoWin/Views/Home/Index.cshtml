@@ -1,0 +1,90 @@
+﻿@model HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "ImmoWin Landing Page";
+}
+
+<div class="container pt-10">
+
+    <div class="row">
+
+        <div class="col-lg-3">
+            <form enctype="multipart/form-data" method="post" id="MyForm">
+
+                <div class="form-group ">
+                    <label asp-for="SelectValues" class="control-label">Filter hier op type gebouw</label>
+                    @for (var i = 0; i < Model.SelectValues.Count; i++)
+                    {
+                        <div class="checkboxes">
+
+                            <label asp-for="@Model.SelectValues[i].Selected">
+                                <input type="checkbox" asp-for="@Model.SelectValues[i].Selected" />
+                                @Model.SelectValues[i].Text
+                            </label>
+                            <input type="hidden" asp-for="@Model.SelectValues[i].Value" />
+                            <input type="hidden" asp-for="@Model.SelectValues[i].Text" />
+                        </div>
+                    }
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-9">
+
+            <table class="table table-sm table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Gebouw</th>
+                        <th scope="col">Sub-Type</th>
+                        <th scope="col">Street</th>
+                        <th scope="col">Postal</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var building in Model.Buildings)
+                    {
+                    <tr>
+                        <td>@building.BuildingType.Name </td>
+                        <td>@building.BuildingType.Type </td>
+                        @if (building.BuildingType.Name == "Appartement")
+                        {
+                            <td>@building.Address.Street  @building.Address.HouseNumber - @building.Address.Floor</td>
+                        }
+                        else
+                        {
+                            <td>@building.Address.Street  @building.Address.HouseNumber</td>
+                        }
+
+                        <td>@building.Address.City @building.Address.Zipcode</td>
+                        <td>€ @building.Price</td>
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+@section scripts{
+
+    <script>
+        console.log("test");
+
+        $('input:checkbox').change(function () {
+            console.log("test")
+                $('#MyForm').submit();
+    
+    });
+
+    
+    </script>
+}
